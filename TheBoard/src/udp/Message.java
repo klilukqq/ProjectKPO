@@ -1,9 +1,5 @@
 package udp;
 
-/**
- *
- * @author truebondar
- */
 public class Message {
     byte type;
     byte[] data;
