@@ -20,10 +20,15 @@ public class UdpManager implements Runnable {
     public final static int MAX_SIZE = 512;
     public final static int SERVER_PORT = 8001;
     public final static int CLIENT_PORT = 8234;
+    private static int num = 0;
     private DatagramSocket ds;
+    private DatagramSocket ds1;
+    private DatagramSocket ds2;
+    private DatagramSocket ds3;
     private DatagramSocketListener listener;
     private boolean isServer;
     private boolean isConnected = false;
+    
     private InetAddress addressTo;
 
     public UdpManager(DatagramSocketListener dsl) {

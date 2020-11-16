@@ -70,6 +70,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 		//
 		udpManager.create();
 		new Thread(udpManager).start();
+                new Thread(udpManager).start();
 	    }
 	});
 	paramsPanel.add(createButton);
