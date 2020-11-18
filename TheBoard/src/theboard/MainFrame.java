@@ -13,10 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-/**
- *
- * @author truebondar
- */
+
 public class MainFrame extends JFrame implements DatagramSocketListener {
 
     private final static int WIDTH = 800;
