@@ -16,8 +16,8 @@ import javax.swing.text.MaskFormatter;
 
 public class MainFrame extends JFrame implements DatagramSocketListener {
 
-    private final static int WIDTH = 800;
-    private final static int HEIGHT = 600;
+    private final static int WIDTH = 1280;
+    private final static int HEIGHT = 1024;
     private final JPanel drawablePanel;
     private List<Primitive2D> myPrims = new ArrayList<Primitive2D>();
     private Color curColor = Color.BLACK;
@@ -48,6 +48,10 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	final JButton colorButton = new JButton("Цвет");
 	colorButton.addActionListener(changeColorListener);
 	paramsPanel.add(colorButton);
+        //Заливка
+        final JButton fullcolorButton = new JButton("Заливка");
+	fullcolorButton.addActionListener(changeFullColorListener);
+	paramsPanel.add(fullcolorButton);
 	// Толщина
 	final JLabel textLabel = new JLabel("Толщина:");
 	paramsPanel.add(textLabel);
@@ -97,6 +101,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 
 	// панель рисования
 	drawablePanel = new DrawablePanel(this, WIDTH, HEIGHT);
+        drawablePanel.setOpaque(true);
 	drawablePanel.addMouseListener(new MListener());
 	drawablePanel.addMouseMotionListener(new MMListener());
 	add(drawablePanel);
@@ -122,6 +127,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    g2d.setColor(prim.getColor());
 	    BasicStroke stroke = new BasicStroke(prim.getThikness());
 	    g2d.setStroke(stroke);
+            
 	    for (int i = 0; i < prim.getPointsCount() - 1; i++) {
 		Point p1 = prim.getPoint(i);
 		Point p2 = prim.getPoint(i + 1);
@@ -182,6 +188,17 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    }
 	}
     };
+    
+    ActionListener changeFullColorListener = new ActionListener() {
+	public void actionPerformed(ActionEvent event) {
+	    drawablePanel.setBackground(Color.blue);
+            drawablePanel.setForeground(Color.green);
+
+            drawablePanel.repaint();
+            add(drawablePanel);
+	}
+    };
+
     ChangeListener thiknessChangeListener = new ChangeListener() {
 	@Override
 	public void stateChanged(ChangeEvent ce) {
