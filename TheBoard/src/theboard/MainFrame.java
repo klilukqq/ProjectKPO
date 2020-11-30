@@ -77,7 +77,7 @@ public class MainFrame extends JFrame{
 	    }
 	});
 	paramsPanel.add(connectButton);
-	//
+        //
 	ipField = new JFormattedTextField();
 	final String pattern = "###.###.###.###";
 	try {
