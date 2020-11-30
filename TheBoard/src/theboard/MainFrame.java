@@ -1,7 +1,5 @@
 package theboard;
 
-import udp.DatagramSocketListener;
-import udp.UdpManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
@@ -17,10 +15,8 @@ import javax.swing.text.MaskFormatter;
  *
  * @author truebondar
  */
-public class MainFrame extends JFrame implements DatagramSocketListener {
+public class MainFrame extends JFrame{
 
-    private final static int WIDTH = 800;
-    private final static int HEIGHT = 600;
     private final JPanel drawablePanel;
     private List<Primitive2D> myPrims = new ArrayList<Primitive2D>();
     private Color curColor = Color.BLACK;
@@ -29,16 +25,13 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
     private List<Primitive2D> friendPrims = new ArrayList<Primitive2D>();
     private Color friendCurColor = Color.BLACK;
     private int friendCurThikness = 3;
-    UdpManager udpManager;
     JFormattedTextField ipField;
     JSlider thiknessSlider;
     JLabel valueLabel;
 
     /////////////////////////////////////////////////////////
-    public MainFrame() {
-	//
-	udpManager = new UdpManager(this);
-	//
+    public MainFrame(int WIDTH, int HEIGHT) 
+    {
 	setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	setResizable(false);
 	setTitle("The board");
@@ -68,8 +61,8 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	createButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
 		//
-		udpManager.create();
-		new Thread(udpManager).start();
+		//udpManager.create();
+		//new Thread(udpManager).start();
 	    }
 	});
 	paramsPanel.add(createButton);
@@ -79,12 +72,12 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	connectButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
 		//
-		udpManager.connectToServer(ipField.getText());
-		new Thread(udpManager).start();
+		//udpManager.connectToServer(ipField.getText());
+		//new Thread(udpManager).start();
 	    }
 	});
 	paramsPanel.add(connectButton);
-	//
+        //
 	ipField = new JFormattedTextField();
 	final String pattern = "###.###.###.###";
 	try {
@@ -102,6 +95,16 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	drawablePanel.addMouseListener(new MListener());
 	drawablePanel.addMouseMotionListener(new MMListener());
 	add(drawablePanel);
+        
+        //выход
+        final JButton exitButton = new JButton("Выход");
+	exitButton.addActionListener(new ActionListener() {
+	    public void actionPerformed(ActionEvent event) {
+		StartMenu.run();
+                setVisible(false);
+	    }
+	});
+	paramsPanel.add(exitButton);
 
 	pack();
 	setVisible(true);
@@ -152,7 +155,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	prims.add(prim);
 	//
 	if (isNeedSend) {
-	    sendNewPrimitive();
+	    //sendNewPrimitive();
 	}
     }
 
@@ -161,7 +164,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	drawablePanel.repaint();
 	//
 	if (isNeedSend) {
-	    sendNewPoint(p);
+	    //sendNewPoint(p);
 	}
     }
 
@@ -170,7 +173,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	drawablePanel.repaint();
 	//
 	if (isNeedSend) {
-	    sendRemovePrimitive();
+	    //sendRemovePrimitive();
 	}
     }
     
@@ -180,7 +183,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    if (selectedColor != null) {
 		curColor = selectedColor;
 		//
-		sendNewColor(curColor);
+		//sendNewColor(curColor);
 	    }
 	}
     };
@@ -190,94 +193,13 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    curThikness = thiknessSlider.getValue();
 	    valueLabel.setText(Integer.toString(curThikness));
 	    //
-	    sendNewThikness(curThikness);
+	    //sendNewThikness(curThikness);
 	}
     };
 
     /////////////////////////////////////////////////////////
-    private void sendNewPrimitive() {
-	// подключены?
-	if (!udpManager.isConnected()) {
-	    return;
-	}
-	udpManager.send(UdpManager.ADD_PRIM_MESSAGE, null);
-    }
-
-    private void sendNewPoint(Point p) {
-	// подключены?
-	if (!udpManager.isConnected()) {
-	    return;
-	}
-	byte[] data = UdpManager.intsCoordsToBytes(new int[]{p.x, p.y});
-	udpManager.send(UdpManager.ADD_POINT_MESSAGE, data);
-    }
-
-    private void sendRemovePrimitive() {
-	// подключены?
-	if (!udpManager.isConnected()) {
-	    return;
-	}
-	udpManager.send(UdpManager.REMOVE_PRIM_MESSAGE, null);
-    }
     
-    private void sendNewColor(Color color) {
-	// подключены?
-	if (!udpManager.isConnected()) {
-	    return;
-	}
-	byte[] data = UdpManager.intToBytes(color.getRGB());
-	udpManager.send(UdpManager.SET_COLOR_MESSAGE, data);
-    }
-
-    private void sendNewThikness(int thikness) {
-	// подключены?
-	if (!udpManager.isConnected()) {
-	    return;
-	}
-	byte[] data = UdpManager.intToBytes(thikness);
-	udpManager.send(UdpManager.SET_THIKNESS_MESSAGE, data);
-    }
     
-    @Override
-    public void onReceiveData(int type, byte[] data) {
-	switch (type) {
-	    case UdpManager.ADD_PRIM_MESSAGE:
-		addPrimitive(friendPrims, new Primitive2D(friendCurColor, friendCurThikness), false);
-		break;
-	    case UdpManager.ADD_POINT_MESSAGE:
-		addFriendPoint(data);
-		break;
-	    case UdpManager.REMOVE_PRIM_MESSAGE:
-		removeLastPrim(friendPrims, false);
-		break;
-	    case UdpManager.SET_COLOR_MESSAGE:
-		setFriendColor(data);
-		break;
-	    case UdpManager.SET_THIKNESS_MESSAGE:
-		setFriendThiknes(data);
-		break;
-	}
-    }
-
-    private void addFriendPoint(byte[] data) {
-	int[] coords = UdpManager.bytesCoordsToInts(data);
-	int size = coords.length;
-	for (int i = 0; i < size; i += 2) {
-	    int x = coords[i];
-	    int y = coords[i + 1];
-	    addPoint(friendPrims, new Point(x, y), false);
-	}
-    }
-    
-    private void setFriendColor(byte[] data) {
-	int color = UdpManager.bytesToInt(data);
-	friendCurColor = new Color(color);
-    }
-    
-    private void setFriendThiknes(byte[] data) {
-	int thikness = UdpManager.bytesToInt(data);
-	friendCurThikness = thikness;
-    }
     
     /////////////////////////////////////////////////////////
     public class MListener implements MouseListener {
@@ -333,7 +255,5 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	}
     }
 
-    public static void main(String[] args) {
-	new MainFrame();
-    }
+    
 }
