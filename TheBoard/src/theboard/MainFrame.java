@@ -62,29 +62,13 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
 	thiknessSlider.addChangeListener(thiknessChangeListener);
 	paramsPanel.add(thiknessSlider);
 	paramsPanel.add(valueLabel);
-	// Создать
-
-	// Подключиться
-	
-        //
-	
+	add(paramsPanel);
 
 	// панель рисования
 	drawablePanel = new DrawablePanel(this, WIDTH, HEIGHT);
 	drawablePanel.addMouseListener(new MListener());
 	drawablePanel.addMouseMotionListener(new MMListener());
 	add(drawablePanel);
-        
-        //выход
-        final JButton exitButton = new JButton("Выход");
-	exitButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent event) {
-		new StartMenu();
-                setVisible(false);
-                dispose();
-	    }
-	});
-	paramsPanel.add(exitButton);
 
 	pack();
 	setVisible(true);
