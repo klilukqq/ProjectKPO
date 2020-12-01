@@ -1,16 +1,10 @@
 package theboard;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
 
 public class StartMenu extends JFrame{
     private static int WIDTH = 800;
@@ -22,14 +16,14 @@ public class StartMenu extends JFrame{
     JLabel valueLabel;
     
     public static void main(String[] args) {
-        run();
+        new StartMenu();
         //new MainFrame(800, 800);
     }
     
-    public static void run() {
-        final JFrame a = new JFrame("");
-        a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        a.setBounds(720,330,300, 280);
+    public StartMenu() {
+        //final JFrame a = new JFrame("");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(720,330,300, 280);
         JLabel c = new JLabel("Введите имя:");
         c.setBounds(60,20,90,20);
         
@@ -40,7 +34,10 @@ public class StartMenu extends JFrame{
 	createButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
 		new MainFrame(WIDTH, HEIGHT);
-                a.setVisible(false);
+                MainFrame.udpManager.create();
+		new Thread(MainFrame.udpManager).start();
+                setVisible(false);
+                dispose();
 	    }
 	});
         createButton.setBounds(70,60,150,30);
@@ -76,38 +73,40 @@ public class StartMenu extends JFrame{
         editComboBox.addActionListener(actionListener);
         
         
-	// Подключиться
-	final JButton connectButton = new JButton("Подключиться");
-
+	// Подключиться;
+	final JButton connectButton = new JButton("Открыть поле");
 	connectButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
-		//
-		//udpManager.connectToServer(ipField.getText());
-		//new Thread(udpManager).start();
+                new MainFrame(WIDTH, HEIGHT);
+                MainFrame.udpManager.connectToServer(ipField.getText());
+		new Thread(MainFrame.udpManager).start();
+                setVisible(false);
+                dispose();
 	    }
 	});
         connectButton.setBounds(70,140,150,30);
         
         
-        JFormattedTextField ip = new JFormattedTextField();
+        ipField = new JFormattedTextField();
 	final String pattern = "###.###.###.###";
 	try {
-	    ip.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter(pattern)));
+	    ipField.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter(pattern)));
 	} catch (ParseException ex) {
-	    ip.setText("127.000.000.001");
+	    ipField.setText("127.000.000.001");
 	    ex.printStackTrace();
 	}
-	ip.setText("127.000.000.001");
-        ip.setBounds(70,175,150,30);
-	
+	ipField.setText("127.000.000.001");
+        ipField.setBounds(70,175,150,30);
+
         
-        a.add(editComboBox);
-        a.add(ip);
-        a.add(c);
-        a.add(b);
-        a.add(createButton);
-        a.add(connectButton);
-        a.setLayout(null);
-        a.setVisible(true);
+        add(editComboBox);
+        add(ipField);
+        add(c);
+        add(b);
+        add(createButton);
+        add(connectButton);
+        setLayout(null);
+        setVisible(true);
+        //System.out.print("\nВведите логин ");
     }
 }
