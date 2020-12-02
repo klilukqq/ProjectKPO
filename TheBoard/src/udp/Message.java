@@ -1,5 +1,6 @@
 package udp;
 
+
 public class Message {
     byte type;
     byte[] data;
