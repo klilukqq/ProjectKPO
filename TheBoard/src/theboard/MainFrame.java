@@ -13,11 +13,12 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
+/**
+ *
+ * @author truebondar
+ */
+public class MainFrame extends JFrame implements DatagramSocketListener{
 
-public class MainFrame extends JFrame implements DatagramSocketListener {
-
-    private final static int WIDTH = 1280;
-    private final static int HEIGHT = 1024;
     private final JPanel drawablePanel;
     private List<Primitive2D> myPrims = new ArrayList<Primitive2D>();
     private Color curColor = Color.BLACK;
@@ -26,14 +27,15 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
     private List<Primitive2D> friendPrims = new ArrayList<Primitive2D>();
     private Color friendCurColor = Color.BLACK;
     private int friendCurThikness = 3;
-    UdpManager udpManager;
+    static UdpManager udpManager;
     JFormattedTextField ipField;
     JSlider thiknessSlider;
     JLabel valueLabel;
 
     /////////////////////////////////////////////////////////
-    public MainFrame() {
-	//
+    public MainFrame(int WIDTH, int HEIGHT) 
+    {
+        //
 	udpManager = new UdpManager(this);
 	//
 	setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -48,10 +50,6 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	final JButton colorButton = new JButton("Цвет");
 	colorButton.addActionListener(changeColorListener);
 	paramsPanel.add(colorButton);
-        //Заливка
-        final JButton fullcolorButton = new JButton("Заливка");
-	fullcolorButton.addActionListener(changeFullColorListener);
-	paramsPanel.add(fullcolorButton);
 	// Толщина
 	final JLabel textLabel = new JLabel("Толщина:");
 	paramsPanel.add(textLabel);
@@ -64,44 +62,10 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	thiknessSlider.addChangeListener(thiknessChangeListener);
 	paramsPanel.add(thiknessSlider);
 	paramsPanel.add(valueLabel);
-	// Создать
-	final JButton createButton = new JButton("Создать");
-	createButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent event) {
-		//
-		udpManager.create();
-		new Thread(udpManager).start();
-                new Thread(udpManager).start();
-	    }
-	});
-	paramsPanel.add(createButton);
-	// Подключиться
-	final JButton connectButton = new JButton("Подключиться");
-
-	connectButton.addActionListener(new ActionListener() {
-	    public void actionPerformed(ActionEvent event) {
-		//
-		udpManager.connectToServer(ipField.getText());
-		new Thread(udpManager).start();
-	    }
-	});
-	paramsPanel.add(connectButton);
-	//
-	ipField = new JFormattedTextField();
-	final String pattern = "###.###.###.###";
-	try {
-	    ipField.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter(pattern)));
-	} catch (ParseException ex) {
-	    ipField.setText("127.000.000.001");
-	    ex.printStackTrace();
-	}
-	ipField.setText("127.000.000.001");
-	paramsPanel.add(ipField);
 	add(paramsPanel);
 
 	// панель рисования
 	drawablePanel = new DrawablePanel(this, WIDTH, HEIGHT);
-        drawablePanel.setOpaque(true);
 	drawablePanel.addMouseListener(new MListener());
 	drawablePanel.addMouseMotionListener(new MMListener());
 	add(drawablePanel);
@@ -127,7 +91,6 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    g2d.setColor(prim.getColor());
 	    BasicStroke stroke = new BasicStroke(prim.getThikness());
 	    g2d.setStroke(stroke);
-            
 	    for (int i = 0; i < prim.getPointsCount() - 1; i++) {
 		Point p1 = prim.getPoint(i);
 		Point p2 = prim.getPoint(i + 1);
@@ -188,17 +151,6 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	    }
 	}
     };
-    
-    ActionListener changeFullColorListener = new ActionListener() {
-	public void actionPerformed(ActionEvent event) {
-	    drawablePanel.setBackground(Color.blue);
-            drawablePanel.setForeground(Color.green);
-
-            drawablePanel.repaint();
-            add(drawablePanel);
-	}
-    };
-
     ChangeListener thiknessChangeListener = new ChangeListener() {
 	@Override
 	public void stateChanged(ChangeEvent ce) {
@@ -348,7 +300,4 @@ public class MainFrame extends JFrame implements DatagramSocketListener {
 	}
     }
 
-    public static void main(String[] args) {
-	new MainFrame();
-    }
 }
