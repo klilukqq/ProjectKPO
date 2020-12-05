@@ -33,7 +33,7 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
     JLabel valueLabel;
 
     /////////////////////////////////////////////////////////
-    public MainFrame(int WIDTH, int HEIGHT) 
+    public MainFrame(int WIDTH, int HEIGHT, String userName) 
     {
         //
 	udpManager = new UdpManager(this);
@@ -46,6 +46,10 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
 	setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 	// панель параметров рисования
 	final JPanel paramsPanel = new JPanel();
+        //имя
+        JLabel nameLabel = new JLabel("Имя: " + userName + "       ");
+        nameLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
+        paramsPanel.add(nameLabel);
 	// Цвет
 	final JButton colorButton = new JButton("Цвет");
 	colorButton.addActionListener(changeColorListener);
