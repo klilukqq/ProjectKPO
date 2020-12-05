@@ -74,7 +74,7 @@ public class StartMenu extends JFrame{
         
         
 	// Подключиться;
-	final JButton connectButton = new JButton("Открыть поле");
+	final JButton connectButton = new JButton("Подключиться");
 	connectButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
                 new MainFrame(WIDTH, HEIGHT);
