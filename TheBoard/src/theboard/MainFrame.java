@@ -38,7 +38,6 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
         //
 	udpManager = new UdpManager(this);
 	//
-        System.out.print("WIDTH " + WIDTH + "HEIGHT " + HEIGHT);
         switch(WIDTH){
             case(800):
                 setBounds(500,150,WIDTH, HEIGHT);
@@ -47,7 +46,6 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
                 setBounds(365,90,WIDTH, HEIGHT);
                 break;
             case(1900):
-                System.out.print("1");
                 setBounds(2,0,WIDTH, HEIGHT);
                 break;
         }
