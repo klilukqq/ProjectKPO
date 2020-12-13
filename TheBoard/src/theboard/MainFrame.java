@@ -13,7 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-
+//
 public class MainFrame extends JFrame implements DatagramSocketListener{
 
     private final JPanel drawablePanel;

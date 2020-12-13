@@ -4,7 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-
+//
 public class DrawablePanel extends JPanel {
 
     private final MainFrame mainFrame;
