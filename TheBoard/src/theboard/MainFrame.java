@@ -33,19 +33,36 @@ public class MainFrame extends JFrame implements DatagramSocketListener{
     JLabel valueLabel;
 
     /////////////////////////////////////////////////////////
-    public MainFrame(int WIDTH, int HEIGHT) 
+    public MainFrame(int WIDTH, int HEIGHT, String userName) 
     {
         //
 	udpManager = new UdpManager(this);
 	//
-	setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        System.out.print("WIDTH " + WIDTH + "HEIGHT " + HEIGHT);
+        switch(WIDTH){
+            case(800):
+                setBounds(500,150,WIDTH, HEIGHT);
+                break;
+            case(1100):
+                setBounds(365,90,WIDTH, HEIGHT);
+                break;
+            case(1900):
+                System.out.print("1");
+                setBounds(2,0,WIDTH, HEIGHT);
+                break;
+        }
+        //
+	//setPreferredSize(new Dimension(WIDTH, HEIGHT));
 	setResizable(false);
 	setTitle("The board");
-	setLocationByPlatform(true);
 	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 	// панель параметров рисования
 	final JPanel paramsPanel = new JPanel();
+        //имя
+        JLabel nameLabel = new JLabel("Имя: " + userName + "       ");
+        nameLabel.setFont(new Font("Dialog", Font.PLAIN, 14));
+        paramsPanel.add(nameLabel);
 	// Цвет
 	final JButton colorButton = new JButton("Цвет");
 	colorButton.addActionListener(changeColorListener);
