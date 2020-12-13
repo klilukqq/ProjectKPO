@@ -4,7 +4,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ *
+ * @author truebondar
+ */
 public class Primitive2D {
     
     public final static int MAX_POINTS = Integer.MAX_VALUE;
