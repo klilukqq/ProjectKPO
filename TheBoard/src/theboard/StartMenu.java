@@ -29,6 +29,7 @@ public class StartMenu extends JFrame{
     public StartMenu() {
         //final JFrame a = new JFrame("");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setBounds(720,330,300, 280);
         JLabel c = new JLabel("Введите имя:");
         c.setBounds(60,20,90,20);
@@ -52,7 +53,7 @@ public class StartMenu extends JFrame{
         
         String[] items = {"800х600",
                         "1100х800",
-                        "1900х1000"
+                        "1900х970"
                         };
         JComboBox editComboBox = new JComboBox(items);
         editComboBox.setEditable(true);
@@ -74,7 +75,7 @@ public class StartMenu extends JFrame{
                         if(item == 2)
                         {
                             WIDTH = 1900;
-                            HEIGHT = 1000;
+                            HEIGHT = 970;
                         }
             }
         };

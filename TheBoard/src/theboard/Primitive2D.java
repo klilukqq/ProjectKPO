@@ -14,7 +14,7 @@ public class Primitive2D {
     
     private Color color;
     private int thikness;
-    List<Point> points = new ArrayList<Point>();
+    private List<Point> points = new ArrayList<Point>();
     
     public Primitive2D(Color color, int thickness) {
 	this.color = color;
