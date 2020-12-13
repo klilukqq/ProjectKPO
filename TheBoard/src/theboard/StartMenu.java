@@ -6,6 +6,10 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
+import javax.swing.text.*;
+import java.awt.*;
+import javax.swing.*;
+
 public class StartMenu extends JFrame{
     private static int WIDTH = 800;
     private static int HEIGHT = 600;
@@ -14,10 +18,12 @@ public class StartMenu extends JFrame{
     JFormattedTextField nameField;
     JSlider thiknessSlider;
     JLabel valueLabel;
+    String userName = "user";
     
     public static void main(String[] args) {
         new StartMenu();
         //new MainFrame(800, 800);
+        //new Test().setVisible(true);
     }
     
     public StartMenu() {
@@ -27,13 +33,15 @@ public class StartMenu extends JFrame{
         JLabel c = new JLabel("Введите имя:");
         c.setBounds(60,20,90,20);
         
-        JTextField b = new JTextField("user");
+        final JTextField b = new JTextField(userName);
+        b.setDocument(new LimitedDocument(13));
         b.setBounds(140,20,100,20);
         //создать
         final JButton createButton = new JButton("Создать");
 	createButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
-		new MainFrame(WIDTH, HEIGHT);
+                userName = b.getText();
+		new MainFrame(WIDTH, HEIGHT, userName);
                 MainFrame.udpManager.create();
 		new Thread(MainFrame.udpManager).start();
                 setVisible(false);
@@ -74,10 +82,11 @@ public class StartMenu extends JFrame{
         
         
 	// Подключиться;
-	final JButton connectButton = new JButton("Открыть поле");
+	final JButton connectButton = new JButton("Подключится");
 	connectButton.addActionListener(new ActionListener() {
 	    public void actionPerformed(ActionEvent event) {
-                new MainFrame(WIDTH, HEIGHT);
+                userName = b.getText();
+                new MainFrame(WIDTH, HEIGHT, userName);
                 MainFrame.udpManager.connectToServer(ipField.getText());
 		new Thread(MainFrame.udpManager).start();
                 setVisible(false);
@@ -109,4 +118,5 @@ public class StartMenu extends JFrame{
         setVisible(true);
         //System.out.print("\nВведите логин ");
     }
+    
 }
